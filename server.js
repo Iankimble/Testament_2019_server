@@ -25,7 +25,7 @@ const app = express();
 // recurrence rule with node schedule that will get random passage every
 // morning at 12 AM
 
-getRandomPassage = function() {
+getRandomPassage = function () {
   var rule = new schedule.RecurrenceRule();
 
   // rule.dayOfWeek = [0, 1, 2, 3, 4, 5, 6];
@@ -33,7 +33,7 @@ getRandomPassage = function() {
 
   rule.second = 10;
 
-  schedule.scheduleJob(rule, function() {
+  schedule.scheduleJob(rule, function () {
     Scripture.aggregate([{ $sample: { size: 1 } }]).exec((err, data) => {
       if (err) {
         return err;
@@ -54,7 +54,7 @@ getRandomPassage = function() {
 // recurrence rule that will remove the current passage from
 //passge schema at 11:59:59 PM daily
 
-clearPassagefromDaily = function() {
+clearPassagefromDaily = function () {
   var rule = new schedule.RecurrenceRule();
 
   // rule.dayOfWeek = [0, 1, 2, 3, 4, 5, 6];
@@ -64,7 +64,7 @@ clearPassagefromDaily = function() {
 
   rule.second = 8;
 
-  schedule.scheduleJob(rule, function() {
+  schedule.scheduleJob(rule, function () {
     Daily.remove().exec((err, result) => {
       if (err) {
         return err;
@@ -142,10 +142,10 @@ app.use((err, req, res, next) => {
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => console.log("Database connected"))
-  .catch(err => {
+  .catch((err) => {
     console.log(`db connection error : ${err.message}`);
     process.exit();
   });
@@ -157,11 +157,11 @@ app.listen(port, () => {
 });
 
 // React front end
-app.use(express.static(path.join(__dirname, "client", "build")));
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
+// app.use(express.static(path.join(__dirname, "client", "build")));
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+// }
 
-app.get("*", (request, response) => {
-  response.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+// app.get("*", (request, response) => {
+//   response.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
